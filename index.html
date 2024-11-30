@@ -1,13 +1,9 @@
-
-   
-   
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Formulario POST con CORS</title>
+  <title>Formulario POST con Proxy</title>
 </head>
 <body>
   <h1>Formulario para Agregar Datos</h1>
@@ -54,8 +50,11 @@
       };
 
       try {
-        // Realizar la solicitud POST
-        const response = await fetch('https://script.google.com/macros/s/AKfycbxWSmWuiYaofuJTSn6Y28y1r8LnbFb14IAY93N0h3U_y-GeRopztZ8PH3zIMwTm4tDe/exec', {
+        // Usar el proxy CORS Anywhere para redirigir la solicitud
+        const proxyUrl = 'https://cors-anywhere.herokuapp.com/';
+        const targetUrl = 'https://script.google.com/macros/s/AKfycbxWSmWuiYaofuJTSn6Y28y1r8LnbFb14IAY93N0h3U_y-GeRopztZ8PH3zIMwTm4tDe/exec'; // Reemplaza con tu URL
+
+        const response = await fetch(proxyUrl + targetUrl, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json', // Especificar el tipo de contenido
@@ -79,3 +78,9 @@
   </script>
 </body>
 </html>
+
+   
+   
+
+
+ 
