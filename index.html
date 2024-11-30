@@ -1,9 +1,13 @@
+
+   
+   
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Formulario POST</title>
+  <title>Formulario POST con CORS</title>
 </head>
 <body>
   <h1>Formulario para Agregar Datos</h1>
@@ -35,7 +39,7 @@
   <pre id="output"></pre>
 
   <script>
-    document.getElementById('dataForm').addEventListener('submit', (event) => {
+    document.getElementById('dataForm').addEventListener('submit', async (event) => {
       event.preventDefault(); // Prevenir el envío del formulario
 
       // Obtener datos del formulario
@@ -49,31 +53,29 @@
         fechaProximoPaso: document.getElementById('fechaProximoPaso').value
       };
 
-      // Realizar la solicitud POST
-      fetch('https://script.google.com/macros/s/AKfycbyZ-wE7W_GXoxmbatfX9QTnSp9sG5Y9YM4DKuQ7CYg3sQpelwwtObzGRO3-1HKQmwtz/exec', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json', // Especificar el tipo de contenido
-        },
-        body: JSON.stringify(formData) // Convertir datos a JSON
-      })
-        .then(response => {
-          if (!response.ok) {
-            throw new Error(`HTTP error! Status: ${response.status}`);
-          }
-          return response.json(); // Convertir la respuesta a JSON
-        })
-        .then(data => {
-          console.log('Respuesta del servidor:', data);
-          document.getElementById('output').textContent = JSON.stringify(data, null, 2);
-        })
-        .catch(error => {
-          console.error('Error en la solicitud:', error);
-          document.getElementById('output').textContent = `Error: ${error.message}`;
+      try {
+        // Realizar la solicitud POST
+        const response = await fetch('https://script.google.com/macros/s/AKfycbxWSmWuiYaofuJTSn6Y28y1r8LnbFb14IAY93N0h3U_y-GeRopztZ8PH3zIMwTm4tDe/exec', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json', // Especificar el tipo de contenido
+          },
+          body: JSON.stringify(formData) // Convertir datos a JSON
         });
+
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+
+        // Convertir la respuesta a JSON
+        const data = await response.json();
+        console.log('Respuesta del servidor:', data);
+        document.getElementById('output').textContent = JSON.stringify(data, null, 2);
+      } catch (error) {
+        console.error('Error en la solicitud:', error);
+        document.getElementById('output').textContent = `Error: ${error.message}`;
+      }
     });
   </script>
 </body>
 </html>
-
-
