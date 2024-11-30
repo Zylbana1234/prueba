@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Formulario POST</title>
+</head>
+<body>
+  <h1>Formulario para Agregar Datos</h1>
+  <form id="dataForm">
+    <label for="apellido">Apellido:</label>
+    <input type="text" id="apellido" name="apellido" required><br><br>
+
+    <label for="tipoCaso">Tipo de Caso:</label>
+    <input type="text" id="tipoCaso" name="tipoCaso" required><br><br>
+
+    <label for="estado">Estado:</label>
+    <input type="text" id="estado" name="estado" required><br><br>
+
+    <label for="pasoRealizado">Paso Realizado:</label>
+    <input type="text" id="pasoRealizado" name="pasoRealizado" required><br><br>
+
+    <label for="proximoPaso">Próximo Paso:</label>
+    <input type="text" id="proximoPaso" name="proximoPaso" required><br><br>
+
+    <label for="responsable">Responsable:</label>
+    <input type="text" id="responsable" name="responsable" required><br><br>
+
+    <label for="fechaProximoPaso">Fecha Próximo Paso:</label>
+    <input type="date" id="fechaProximoPaso" name="fechaProximoPaso" required><br><br>
+
+    <button type="submit">Enviar Datos</button>
+  </form>
+
+  <pre id="output"></pre>
+
+  <script>
+    document.getElementById('dataForm').addEventListener('submit', (event) => {
+      event.preventDefault(); // Prevenir el envío del formulario
+
+      // Obtener datos del formulario
+      const formData = {
+        apellido: document.getElementById('apellido').value,
+        tipoCaso: document.getElementById('tipoCaso').value,
+        estado: document.getElementById('estado').value,
+        pasoRealizado: document.getElementById('pasoRealizado').value,
+        proximoPaso: document.getElementById('proximoPaso').value,
+        responsable: document.getElementById('responsable').value,
+        fechaProximoPaso: document.getElementById('fechaProximoPaso').value
+      };
+
+      // Realizar la solicitud POST
+      fetch('https://script.google.com/macros/s/AKfycbzNGszKkYwgoEgejPURWtyFSx5obt3eVdc5epdJ-xLyK19EgpHucC8IO95vi72tYjSO/exec', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json', // Especificar el tipo de contenido
+        },
+        body: JSON.stringify(formData) // Convertir datos a JSON
+      })
+        .then(response => {
+          if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+          }
+          return response.json(); // Convertir la respuesta a JSON
+        })
+        .then(data => {
+          console.log('Respuesta del servidor:', data);
+          document.getElementById('output').textContent = JSON.stringify(data, null, 2);
+        })
+        .catch(error => {
+          console.error('Error en la solicitud:', error);
+          document.getElementById('output').textContent = `Error: ${error.message}`;
+        });
+    });
+  </script>
+</body>
+</html>
+
+
